@@ -51,8 +51,14 @@ class Command(BaseCommand):
         supports.save()
         supports.permissions.set(supports_permissions)
 
-        UserModel.objects.create_user('Ben', password='BenBen', groups=sellers)
-        UserModel.objects.create_user('Tom', password='TomTom', groups=sellers)
-        UserModel.objects.create_user('Nana', password='NanaNana', groups=supports)
+        UserModel.objects.create_user('Ben', password='BenBen')
+        user = UserModel.objects.get(username='Ben')
+        user.groups.set([sellers])
+        UserModel.objects.create_user('Tom', password='TomTom')
+        user = UserModel.objects.get(username='Tom')
+        user.groups.set([sellers])
+        UserModel.objects.create_user('Nana', password='NanaNana')
+        user = UserModel.objects.get(username='Nana')
+        user.groups.set([supports])
 
         self.stdout.write(self.style.SUCCESS('Data created'))
