@@ -87,4 +87,3 @@ class EventDetailSerializer(ModelSerializer):
         read_only_fields = ['created_time',
                             'updated_time',
                             ]
-

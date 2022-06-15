@@ -4,7 +4,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
 from crm.models import Client, Contract, Event
-from crm.permissions import IsManagerTeam, IsSalesTeam, IsSupportTeam
+from crm.permissions import IsSalesTeam, IsSupportTeam
 from crm.serializers import ClientsListSerializer, ClientDetailSerializer, \
     ContractsListSerializer, ContractDetailSerializer, \
     EventsListSerializer, EventDetailSerializer
@@ -13,8 +13,12 @@ from crm.serializers import ClientsListSerializer, ClientDetailSerializer, \
 class ClientViewSet(ModelViewSet):
     serializer_class = ClientsListSerializer
     detail_serializer_class = ClientDetailSerializer
-    permission_classes = [IsManagerTeam | IsSalesTeam | IsSupportTeam]
+    permission_classes = [IsSalesTeam | IsSupportTeam]
+    filter_fields = ['name', 'email']
     queryset = Client.objects.all()
+    filterset_fields = ['last_name',
+                        'email',
+                        ]
 
     def get_serializer_class(self):
         if self.action != 'list':
@@ -28,8 +32,13 @@ class ClientViewSet(ModelViewSet):
 class ContractViewSet(ModelViewSet):
     serializer_class = ContractsListSerializer
     detail_serializer_class = ContractDetailSerializer
-    permission_classes = [IsManagerTeam | IsSalesTeam | IsSupportTeam]
+    permission_classes = [IsSalesTeam | IsSupportTeam]
     queryset = Contract.objects.all()
+    filterset_fields = ["client__last_name",
+                        'client__email',
+                        'created_time',
+                        "amount",
+                        ]
 
     def get_serializer_class(self):
         if self.action != 'list':
@@ -46,8 +55,12 @@ class ContractViewSet(ModelViewSet):
 class EventViewSet(ModelViewSet):
     serializer_class = EventsListSerializer
     detail_serializer_class = EventDetailSerializer
-    permission_classes = [IsManagerTeam | IsSalesTeam | IsSupportTeam]
+    permission_classes = [IsSalesTeam | IsSupportTeam]
     queryset = Event.objects.all()
+    filterset_fields = ["contract__client__lastname",
+                        'contract__client__email',
+                        'event_date',
+                        ]
 
     def get_serializer_class(self):
         if self.action != 'list':

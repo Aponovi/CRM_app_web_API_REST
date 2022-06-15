@@ -22,7 +22,6 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from crm.views import ClientViewSet, ContractViewSet, EventViewSet
 
 router = routers.DefaultRouter()
-# router.register(r'users', UserViewSet)
 router.register(r'clients', ClientViewSet)
 router.register(r'contracts', ContractViewSet)
 router.register(r'events', EventViewSet)

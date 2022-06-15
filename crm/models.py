@@ -24,7 +24,7 @@ class Client(models.Model):
         ordering = ['company_name']
 
     def __str__(self):
-        return f"{self.pk} - {self.company_name} - {self.first_name} {self.last_name}"
+        return f"(id client:{self.pk})  -  {self.company_name}"
 
 
 class Contract(models.Model):
@@ -37,19 +37,12 @@ class Contract(models.Model):
     sales_contact = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
-        return f"({self.client})"
+        return f"(id contrat: {self.pk}) {self.client}"
 
 
 class Event(models.Model):
-
-    STATUS_CHOICES = (
-        ("coming", "coming"),
-        ("finished", "finished"),
-        ("cancel", "cancel"),
-    )
-
-    contract = models.ForeignKey(Contract, on_delete=models.CASCADE, related_name="event_contract")
-    status = models.CharField(max_length=16, choices=STATUS_CHOICES, default='coming')
+    contract = models.OneToOneField(Contract, on_delete=models.CASCADE, related_name="event_contract")
+    status = models.BooleanField(default=False)
     attendees = models.IntegerField()
     event_date = models.DateTimeField()
     notes = models.TextField(blank=True, null=True)
