@@ -1,4 +1,6 @@
-from rest_framework import mixins, request
+from django_filters import FilterSet
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import mixins, request, filters
 from rest_framework.generics import GenericAPIView, get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
@@ -34,11 +36,11 @@ class ContractViewSet(ModelViewSet):
     detail_serializer_class = ContractDetailSerializer
     permission_classes = [IsSalesTeam | IsSupportTeam]
     queryset = Contract.objects.all()
-    filterset_fields = ["client__last_name",
-                        'client__email',
-                        'created_time',
-                        "amount",
-                        ]
+    filterset_fields = {'client__last_name': ['exact'],
+                        'client__email': ['exact'],
+                        'created_time': ['gte', 'lte', 'exact', 'gt', 'lt'],
+                        'amount': ['exact'],
+                        }
 
     def get_serializer_class(self):
         if self.action != 'list':
@@ -57,8 +59,8 @@ class EventViewSet(ModelViewSet):
     detail_serializer_class = EventDetailSerializer
     permission_classes = [IsSalesTeam | IsSupportTeam]
     queryset = Event.objects.all()
-    filterset_fields = ["contract__client__lastname",
-                        'contract__client__email',
+    filterset_fields = ['contract__client',
+                        'contract_id',
                         'event_date',
                         ]
 
