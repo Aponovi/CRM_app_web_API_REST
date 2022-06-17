@@ -54,6 +54,20 @@ DATABASES = {
 
 Une fois que vous avez lancé le serveur avec  `python manage.py runserver`, rendez-vous sur un navigateur web à l'adresse http://localhost:8000/admin/
 
+Vous pouvez accéder à  l'interface Admin avec le compte administrateur suivant :\
+user : admin\
+mdp : admin
+
+Les mots de passe des comptes de démonstration sont :\
+user : Ben\
+mdp : BenBen
+
+user : Tom\
+mdp : TomTom
+
+user : Nana\
+mdp : NanaNana
+
 
 ### Documentation
 
