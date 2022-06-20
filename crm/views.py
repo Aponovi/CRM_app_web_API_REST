@@ -1,8 +1,5 @@
-from django_filters import FilterSet
-from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import mixins, request, filters
-from rest_framework.generics import GenericAPIView, get_object_or_404
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.exceptions import ValidationError
+from rest_framework.generics import get_object_or_404
 from rest_framework.viewsets import ModelViewSet
 
 from crm.models import Client, Contract, Event
@@ -68,3 +65,9 @@ class EventViewSet(ModelViewSet):
         if self.action != 'list':
             return self.detail_serializer_class
         return super().get_serializer_class()
+
+    def perform_create(self, serializer):
+        contract = get_object_or_404(Contract, pk=self.request.data['contract'])
+        if contract.status is False:
+            raise ValidationError("Le contrat n'est pas signé")
+        serializer.save()
